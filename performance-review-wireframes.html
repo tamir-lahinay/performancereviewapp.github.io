@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Review App — Wireframes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #f5f4f1;
+    --surface: #ffffff;
+    --surface-2: #f0efe9;
+    --surface-3: #e8e7e0;
+    --border: rgba(0,0,0,0.09);
+    --border-md: rgba(0,0,0,0.15);
+    --border-strong: rgba(0,0,0,0.25);
+    --text: #1a1a18;
+    --text-2: #5a5a54;
+    --text-3: #9a9a90;
+    --blue: #2563eb;
+    --blue-bg: #eff4ff;
+    --blue-text: #1d4ed8;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --green-text: #15803d;
+    --amber: #d97706;
+    --amber-bg: #fffbeb;
+    --amber-text: #b45309;
+    --red: #dc2626;
+    --red-bg: #fef2f2;
+    --red-text: #b91c1c;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --sidebar-w: 210px;
+    --font: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    height: 52px;
+    gap: 0;
+  }
+  .nav-brand {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-right: 32px;
+    white-space: nowrap;
+  }
+  .nav-brand span { color: var(--text-3); font-weight: 400; }
+  .nav-tabs { display: flex; gap: 0; flex: 1; }
+  .nav-tab {
+    padding: 0 18px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+  .nav-role-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--surface-2);
+    color: var(--text-2);
+    margin-left: 6px;
+    font-weight: 400;
+  }
+  .nav-meta {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* ── PAGE WRAPPER ── */
+  .page { display: none; }
+  .page.active { display: flex; height: calc(100vh - 52px); overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .sidebar-head {
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-appname { font-size: 13px; font-weight: 600; color: var(--text); }
+  .sidebar-cycle {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    background: var(--blue-bg);
+    color: var(--blue-text);
+  }
+  .sidebar-role {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    background: var(--surface-2);
+    color: var(--text-2);
+  }
+  .sidebar-section {
+    padding: 14px 16px 4px;
+    font-size: 10px;
+    letter-spacing: .07em;
+    color: var(--text-3);
+    text-transform: uppercase;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-2);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: background .1s;
+  }
+  .sidebar-item:hover { background: var(--surface-2); color: var(--text); }
+  .sidebar-item.active {
+    color: var(--text);
+    font-weight: 500;
+    border-left-color: var(--text);
+    background: var(--surface-2);
+  }
+  .s-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-done { background: var(--green); }
+  .dot-prog { background: var(--amber); }
+  .dot-none { background: var(--border-md); }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .sf-label { font-size: 11px; color: var(--text-3); }
+  .sf-name { font-size: 13px; font-weight: 500; color: var(--text); margin-top: 2px; }
+  .sf-sub { font-size: 11px; color: var(--text-3); }
+
+  /* ── MAIN SCROLL ── */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 26px;
+    background: var(--bg);
+  }
+
+  /* ── SHARED COMPONENTS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--text-3);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 15px;
+  }
+  .stat-label { font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+  .stat-val { font-size: 24px; font-weight: 500; color: var(--text); line-height: 1; }
+  .stat-delta { font-size: 11px; margin-top: 5px; color: var(--text-3); }
+  .delta-up { color: var(--green-text); }
+  .delta-dn { color: var(--red-text); }
+
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; flex-shrink: 0;
+  }
+  .av-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .av-green { background: var(--green-bg); color: var(--green-text); }
+  .av-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .av-red { background: var(--red-bg); color: var(--red-text); }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .badge-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .badge-green { background: var(--green-bg); color: var(--green-text); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .badge-red { background: var(--red-bg); color: var(--red-text); }
+  .badge-gray { background: var(--surface-2); color: var(--text-2); }
+
+  .btn {
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--text-2);
+    transition: background .1s, color .1s;
+  }
+  .btn:hover { background: var(--surface-2); color: var(--text); }
+  .btn-primary {
+    background: var(--text);
+    color: var(--surface);
+    border-color: var(--text);
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-sm { font-size: 12px; padding: 5px 12px; }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .tab {
+    padding: 9px 16px;
+    font-size: 13px;
+    color: var(--text-2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .1s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); font-weight: 500; border-bottom-color: var(--text); }
+
+  .page-footer {
+    padding: 13px 26px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .footer-note { font-size: 12px; color: var(--text-3); }
+
+  textarea, input[type=text] {
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 1px solid var(--border-md);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    width: 100%;
+    line-height: 1.6;
+    outline: none;
+    transition: border-color .15s;
+  }
+  textarea:focus, input[type=text]:focus { border-color: var(--border-strong); }
+  textarea { resize: none; }
+
+  select {
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-md);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* ── STARS ── */
+  .stars { display: flex; gap: 4px; }
+  .star {
+    width: 26px; height: 26px;
+    border-radius: 5px;
+    border: 1px solid var(--border-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-3);
+    cursor: pointer;
+    user-select: none;
+    transition: background .1s;
+  }
+  .star:hover { background: var(--surface-2); color: var(--text); }
+  .star.on { background: var(--amber-bg); border-color: #fcd34d; color: var(--amber-text); }
+
+  /* ── PROGRESS BAR ── */
+  .pbar-wrap { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+  .pbar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+  .pbar-blue { background: var(--blue); }
+  .pbar-green { background: var(--green); }
+  .pbar-amber { background: var(--amber); }
+
+  /* ── COMP ROWS ── */
+  .comp-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .comp-info { flex: 1; }
+  .comp-name { font-size: 13px; color: var(--text); }
+  .comp-hint { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+  /* ── REVIEWER LIST ROWS ── */
+  .reviewer-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .reviewer-row:last-child { border-bottom: none; }
+  .reviewer-row:hover { background: var(--surface-2); margin: 0 -16px; padding: 10px 16px; border-radius: var(--radius); }
+  .rev-name { font-size: 13px; font-weight: 500; width: 130px; flex-shrink: 0; }
+  .rev-team { font-size: 12px; color: var(--text-3); width: 80px; flex-shrink: 0; }
+
+  /* ── EMP FLAG ROWS ── */
+  .emp-row {
+    display: flex; align-items: center; gap: 9px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .emp-row:last-child { border-bottom: none; }
+  .emp-row:hover .emp-name { text-decoration: underline; }
+  .emp-name { font-size: 13px; color: var(--text); flex: 1; }
+  .emp-dept { font-size: 11px; color: var(--text-3); }
+  .score-pill { font-size: 12px; font-weight: 500; padding: 2px 9px; border-radius: 20px; }
+
+  /* ── HISTORY TIMELINE ── */
+  .hist-item { display: flex; gap: 14px; margin-bottom: 16px; }
+  .hist-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .h-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+  .h-dot-active { background: var(--blue); }
+  .h-dot-old { background: var(--border-strong); }
+  .h-vline { width: 1px; flex: 1; background: var(--border); margin-top: 4px; }
+  .hist-content { flex: 1; padding-bottom: 14px; }
+  .h-cycle { font-size: 13px; font-weight: 500; color: var(--text); }
+  .h-meta { font-size: 11px; color: var(--text-3); margin: 2px 0 8px; }
+  .h-scores { display: flex; flex-wrap: wrap; gap: 6px; }
+  .h-pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--surface-2); color: var(--text-2); }
+  .h-total { background: var(--green-bg); color: var(--green-text); }
+
+  /* ── CHARTS ── */
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* ── NOTICE BANNER ── */
+  .notice {
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    border: 1px solid;
+    font-size: 13px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .notice-amber { background: var(--amber-bg); border-color: #fcd34d; color: var(--amber-text); }
+  .notice-green { background: var(--green-bg); border-color: #86efac; color: var(--green-text); }
+  .notice-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: calc(100vh - 52px);
+    padding: 48px 32px;
+    background: var(--bg);
+  }
+  .cover-title {
+    font-size: 32px; font-weight: 600; color: var(--text);
+    letter-spacing: -0.03em; text-align: center; margin-bottom: 8px;
+  }
+  .cover-sub { font-size: 15px; color: var(--text-2); text-align: center; margin-bottom: 40px; }
+  .cover-grid { display: grid; grid-template-columns: repeat(2, 280px); gap: 16px; }
+  .cover-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 22px;
+    cursor: pointer; transition: border-color .15s, box-shadow .15s;
+  }
+  .cover-card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .cover-icon {
+    width: 36px; height: 36px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; margin-bottom: 12px;
+  }
+  .cover-card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .cover-card-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .cover-card-role { font-size: 11px; color: var(--text-3); margin-top: 10px; }
+  .cover-meta { margin-top: 36px; font-size: 12px; color: var(--text-3); text-align: center; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">Performance Review <span>/ Wireframes</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('cover', this)">Overview</div>
+    <div class="nav-tab" onclick="showPage('reviewer', this)">Reviewer <span class="nav-role-pill">Manager</span></div>
+    <div class="nav-tab" onclick="showPage('gm', this)">GM Dashboard <span class="nav-role-pill">General Manager</span></div>
+    <div class="nav-tab" onclick="showPage('hr', this)">HR Analytics <span class="nav-role-pill">HR Admin</span></div>
+    <div class="nav-tab" onclick="showPage('employee', this)">Self-Assessment <span class="nav-role-pill">Employee</span></div>
+  </div>
+  <div class="nav-meta">v1.1 · H1 2026 Cycle · PRD Wireframes</div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════════ -->
+<div id="page-cover" class="page active">
+  <div class="cover" style="width:100%">
+    <div class="cover-title">Performance Review App</div>
+    <div class="cover-sub">Interactive wireframes — v1.1 · May 2026</div>
+    <div class="cover-grid">
+      <div class="cover-card" onclick="showPage('reviewer', document.querySelectorAll('.nav-tab')[1])">
+        <div class="cover-icon" style="background:#fffbeb">📋</div>
+        <div class="cover-card-title">Reviewer — Review Form</div>
+        <div class="cover-card-desc">Competency ratings, qualitative comments, goal-setting, and employee self-assessment view.</div>
+        <div class="cover-card-role">Role: Manager (Reviewer)</div>
+      </div>
+      <div class="cover-card" onclick="showPage('gm', document.querySelectorAll('.nav-tab')[2])">
+        <div class="cover-icon" style="background:#eff4ff">📊</div>
+        <div class="cover-card-title">GM Dashboard</div>
+        <div class="cover-card-desc">Team completion tracker, aggregated scores, high performer and at-risk flags.</div>
+        <div class="cover-card-role">Role: General Manager</div>
+      </div>
+      <div class="cover-card" onclick="showPage('hr', document.querySelectorAll('.nav-tab')[3])">
+        <div class="cover-icon" style="background:#f0fdf4">🏢</div>
+        <div class="cover-card-title">HR Analytics Dashboard</div>
+        <div class="cover-card-desc">Company-wide performance overview, department scores, cycle trends, and cycle release controls.</div>
+        <div class="cover-card-role">Role: HR Administrator</div>
+      </div>
+      <div class="cover-card" onclick="showPage('employee', document.querySelectorAll('.nav-tab')[4])">
+        <div class="cover-icon" style="background:#fef2f2">👤</div>
+        <div class="cover-card-title">Employee Self-Assessment</div>
+        <div class="cover-card-desc">Self-rating form, reflection questions, and review history with released manager feedback.</div>
+        <div class="cover-card-role">Role: Employee</div>
+      </div>
+    </div>
+    <div class="cover-meta">
+      Performance Review SaaS · Internal Web App · PRD v1.1<br>
+      Semi-annual review cycle · Google SSO · Multi-language · Role-gated access<br>
+      Hierarchy: HR Admin → General Manager → Reviewer → Employee
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1: REVIEWER — REVIEW FORM
+══════════════════════════════════════════ -->
+<div id="page-reviewer" class="page">
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-appname">Performance Review</div>
+      <div class="sidebar-cycle">H1 2026 Cycle</div>
+    </div>
+    <div class="sidebar-section">My Team</div>
+    <div class="sidebar-item"><span class="s-dot dot-done"></span>Aisha Nkosi</div>
+    <div class="sidebar-item active"><span class="s-dot dot-prog"></span>Daniel Reeves</div>
+    <div class="sidebar-item"><span class="s-dot dot-none"></span>Priya Mehta</div>
+    <div class="sidebar-item"><span class="s-dot dot-none"></span>Tom Hargreaves</div>
+    <div class="sidebar-item"><span class="s-dot dot-none"></span>Yuki Tanaka</div>
+    <div class="sidebar-footer">
+      <div class="pbar-wrap" style="margin-bottom:6px">
+        <div class="pbar-fill pbar-green" style="width:20%"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-3)">1 of 5 complete · Closes Jun 30</div>
+    </div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+    <div class="main" style="flex:1">
+
+      <!-- Employee header -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+        <div class="avatar av-amber" style="width:42px;height:42px;font-size:14px">DR</div>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:var(--text)">Daniel Reeves</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">Senior Engineer · Engineering</div>
+        </div>
+        <button class="btn btn-sm" style="margin-left:auto">View prior reviews</button>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab active" id="rv-tab-mgr" onclick="rvTab('mgr')">Manager review</div>
+        <div class="tab" id="rv-tab-self" onclick="rvTab('self')">Self-assessment <span class="badge badge-green" style="margin-left:5px">Submitted</span></div>
+        <div class="tab" id="rv-tab-goals" onclick="rvTab('goals')">Goals</div>
+      </div>
+
+      <!-- Manager review pane -->
+      <div id="rv-pane-mgr">
+        <div class="card-label">Competency ratings</div>
+        <div class="card">
+          <div style="display:flex;justify-content:flex-end;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text-3);margin-right:4px">Employee self-rating →</span>
+            <span style="font-size:11px;color:var(--text-3)">Your rating →</span>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Technical skills</div></div>
+            <span class="badge badge-gray" style="font-size:11px;min-width:38px;text-align:center">4 / 5</span>
+            <div class="stars" data-row="1">
+              <div class="star" onclick="rate(1,1)">1</div><div class="star" onclick="rate(1,2)">2</div><div class="star on" onclick="rate(1,3)">3</div><div class="star" onclick="rate(1,4)">4</div><div class="star" onclick="rate(1,5)">5</div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Communication</div></div>
+            <span class="badge badge-gray" style="font-size:11px;min-width:38px;text-align:center">3 / 5</span>
+            <div class="stars" data-row="2">
+              <div class="star" onclick="rate(2,1)">1</div><div class="star" onclick="rate(2,2)">2</div><div class="star" onclick="rate(2,3)">3</div><div class="star on" onclick="rate(2,4)">4</div><div class="star" onclick="rate(2,5)">5</div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Collaboration</div></div>
+            <span class="badge badge-gray" style="font-size:11px;min-width:38px;text-align:center">5 / 5</span>
+            <div class="stars" data-row="3">
+              <div class="star" onclick="rate(3,1)">1</div><div class="star on" onclick="rate(3,2)">2</div><div class="star" onclick="rate(3,3)">3</div><div class="star" onclick="rate(3,4)">4</div><div class="star" onclick="rate(3,5)">5</div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Ownership &amp; delivery</div></div>
+            <span class="badge badge-gray" style="font-size:11px;min-width:38px;text-align:center">4 / 5</span>
+            <div class="stars" data-row="4">
+              <div class="star" onclick="rate(4,1)">1</div><div class="star" onclick="rate(4,2)">2</div><div class="star" onclick="rate(4,3)">3</div><div class="star on" onclick="rate(4,4)">4</div><div class="star" onclick="rate(4,5)">5</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-label">Qualitative comments</div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:7px">Strengths</div>
+          <textarea rows="3" placeholder="What has this person done exceptionally well this half?"></textarea>
+          <div style="font-size:12px;color:var(--text-2);margin:13px 0 7px">Areas for growth</div>
+          <textarea rows="3" placeholder="What should they focus on developing next cycle?"></textarea>
+        </div>
+      </div>
+
+      <!-- Self-assessment pane -->
+      <div id="rv-pane-self" style="display:none">
+        <div class="notice notice-green"><div class="notice-dot" style="background:var(--green)"></div><div>Self-assessment submitted May 2, 2026 — read-only.</div></div>
+        <div class="card">
+          <div class="comp-row"><div class="comp-info"><div class="comp-name">Technical skills</div></div><div class="stars"><div class="star on">1</div><div class="star on">2</div><div class="star on">3</div><div class="star on">4</div><div class="star">5</div></div></div>
+          <div class="comp-row"><div class="comp-info"><div class="comp-name">Communication</div></div><div class="stars"><div class="star on">1</div><div class="star on">2</div><div class="star on">3</div><div class="star">4</div><div class="star">5</div></div></div>
+          <div class="comp-row"><div class="comp-info"><div class="comp-name">Collaboration</div></div><div class="stars"><div class="star on">1</div><div class="star on">2</div><div class="star on">3</div><div class="star on">4</div><div class="star on">5</div></div></div>
+          <div class="comp-row"><div class="comp-info"><div class="comp-name">Ownership &amp; delivery</div></div><div class="stars"><div class="star on">1</div><div class="star on">2</div><div class="star on">3</div><div class="star on">4</div><div class="star">5</div></div></div>
+        </div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">What I'm proud of this half</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6">Led the migration to the new API layer ahead of schedule and mentored two junior engineers through their first major feature delivery.</div>
+          <div style="font-size:12px;color:var(--text-2);margin:12px 0 6px">What I want to improve</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6">I'd like to improve how I communicate blockers upward — I tend to hold issues longer than I should before escalating.</div>
+          <div style="font-size:12px;color:var(--text-2);margin:12px 0 6px">Anything else for my manager</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6">Workload has been heavy this half — would appreciate discussing prioritisation in our next 1:1.</div>
+        </div>
+      </div>
+
+      <!-- Goals pane -->
+      <div id="rv-pane-goals" style="display:none">
+        <div class="card-label">Goals for H2 2026</div>
+        <div class="card">
+          <div style="display:flex;gap:8px;margin-bottom:8px"><input type="text" value="Complete system design certification" style="flex:1"><input type="text" value="Sep 2026" style="width:110px"></div>
+          <div style="display:flex;gap:8px;margin-bottom:8px"><input type="text" value="Lead one cross-team project end-to-end" style="flex:1"><input type="text" value="Dec 2026" style="width:110px"></div>
+          <div style="display:flex;gap:8px"><input type="text" placeholder="Add a goal..." style="flex:1;color:var(--text-3)"><input type="text" placeholder="Due date" style="width:110px"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-3)">Goals are visible to Daniel and referenced in the H2 2026 review cycle.</div>
+      </div>
+
+    </div>
+    <div class="page-footer">
+      <div class="footer-note">Draft auto-saved · 11:42 am</div>
+      <div style="display:flex;gap:9px"><button class="btn">Save draft</button><button class="btn btn-primary">Submit review</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2: GM DASHBOARD
+══════════════════════════════════════════ -->
+<div id="page-gm" class="page">
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-appname">Performance Review</div>
+      <div class="sidebar-role">General Manager</div>
+    </div>
+    <div class="sidebar-section">Overview</div>
+    <div class="sidebar-item active">Team dashboard</div>
+    <div class="sidebar-item">Cycle history</div>
+    <div class="sidebar-section">Reports</div>
+    <div class="sidebar-item">Score trends</div>
+    <div class="sidebar-item">Export</div>
+    <div class="sidebar-footer">
+      <div class="sf-label">Logged in as</div>
+      <div class="sf-name">Sarah Lin</div>
+      <div class="sf-sub">GM · Product Engineering</div>
+    </div>
+  </div>
+  <div class="main">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--text)">H1 2026 Review Cycle</div>
+        <div style="font-size:12px;color:var(--text-3);margin-top:3px">Closes Jun 30, 2026 · 57 days remaining</div>
+      </div>
+      <button class="btn btn-sm">Export report</button>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Reviews complete</div><div class="stat-val">6</div><div class="stat-delta">of 18 total</div></div>
+      <div class="stat"><div class="stat-label">Avg team score</div><div class="stat-val">3.6</div><div class="stat-delta delta-up">+0.2 vs H2 2025</div></div>
+      <div class="stat"><div class="stat-label">High performers</div><div class="stat-val" style="color:var(--green)">4</div><div class="stat-delta delta-up">flagged this cycle</div></div>
+      <div class="stat"><div class="stat-label">At risk</div><div class="stat-val" style="color:var(--red)">2</div><div class="stat-delta delta-dn">needs attention</div></div>
+    </div>
+
+    <div class="card-label">Reviewer completion status</div>
+    <div class="card" style="padding:0 16px">
+      <div class="reviewer-row">
+        <div class="avatar av-green">AN</div>
+        <div class="rev-name">Aisha Nkosi</div>
+        <div class="rev-team">Backend</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:3px"><span>6 / 6</span></div>
+          <div class="pbar-wrap"><div class="pbar-fill pbar-green" style="width:100%"></div></div>
+        </div>
+        <span class="badge badge-green">Done</span>
+      </div>
+      <div class="reviewer-row">
+        <div class="avatar av-amber">DR</div>
+        <div class="rev-name">Daniel Reeves</div>
+        <div class="rev-team">Frontend</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:3px"><span>3 / 5</span></div>
+          <div class="pbar-wrap"><div class="pbar-fill pbar-amber" style="width:60%"></div></div>
+        </div>
+        <span class="badge badge-amber">In progress</span>
+        <button class="btn btn-sm">Remind</button>
+      </div>
+      <div class="reviewer-row">
+        <div class="avatar av-blue">PM</div>
+        <div class="rev-name">Priya Mehta</div>
+        <div class="rev-team">Platform</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:3px"><span>0 / 4</span></div>
+          <div class="pbar-wrap"><div class="pbar-fill pbar-blue" style="width:0%"></div></div>
+        </div>
+        <span class="badge badge-gray">Not started</span>
+        <button class="btn btn-sm">Remind</button>
+      </div>
+      <div class="reviewer-row">
+        <div class="avatar av-amber">TH</div>
+        <div class="rev-name">Tom Hargreaves</div>
+        <div class="rev-team">Mobile</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:3px"><span>2 / 3</span></div>
+          <div class="pbar-wrap"><div class="pbar-fill pbar-amber" style="width:67%"></div></div>
+        </div>
+        <span class="badge badge-amber">In progress</span>
+        <button class="btn btn-sm">Remind</button>
+      </div>
+    </div>
+
+    <div class="card-label">Performance flags</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card">
+        <div style="font-size:12px;font-weight:600;color:var(--green-text);margin-bottom:10px">High performers</div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">YT</div><div style="flex:1"><div class="emp-name">Yuki Tanaka</div><div class="emp-dept">Engineering</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.8</span></div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">AN</div><div style="flex:1"><div class="emp-name">Aisha Nkosi</div><div class="emp-dept">Engineering</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.6</span></div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">RD</div><div style="flex:1"><div class="emp-name">Rohan Das</div><div class="emp-dept">Product</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.5</span></div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">CB</div><div style="flex:1"><div class="emp-name">Claire Bouchard</div><div class="emp-dept">Design</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.4</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:12px;font-weight:600;color:var(--red-text);margin-bottom:10px">At risk</div>
+        <div class="emp-row"><div class="avatar av-red" style="width:28px;height:28px;font-size:11px">MW</div><div style="flex:1"><div class="emp-name">Marcus Webb</div><div class="emp-dept">Sales</div></div><span class="score-pill" style="background:var(--red-bg);color:var(--red-text)">2.1</span></div>
+        <div class="emp-row"><div class="avatar av-red" style="width:28px;height:28px;font-size:11px">SO</div><div style="flex:1"><div class="emp-name">Sara Okonkwo</div><div class="emp-dept">Operations</div></div><span class="score-pill" style="background:var(--red-bg);color:var(--red-text)">2.4</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3: HR ANALYTICS
+══════════════════════════════════════════ -->
+<div id="page-hr" class="page">
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-appname">Performance Review</div>
+      <div class="sidebar-role" style="background:var(--blue-bg);color:var(--blue-text)">HR Admin</div>
+    </div>
+    <div class="sidebar-section">Overview</div>
+    <div class="sidebar-item active">Analytics</div>
+    <div class="sidebar-item">Completion tracker</div>
+    <div class="sidebar-section">Manage</div>
+    <div class="sidebar-item">Cycles</div>
+    <div class="sidebar-item">Users &amp; roles</div>
+    <div class="sidebar-item">Org hierarchy</div>
+    <div class="sidebar-section">Reports</div>
+    <div class="sidebar-item">Export data</div>
+    <div class="sidebar-item">Audit log</div>
+    <div class="sidebar-footer">
+      <div class="sf-label">Logged in as</div>
+      <div class="sf-name">Noa Shapiro</div>
+      <div class="sf-sub">HR Administrator</div>
+    </div>
+  </div>
+  <div class="main">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap">
+      <div style="font-size:15px;font-weight:600;color:var(--text)">Company analytics</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="hr-cycle" onchange="updateHRStats(this.value)">
+          <option value="h1_26">H1 2026</option>
+          <option value="h2_25">H2 2025</option>
+          <option value="h1_25">H1 2025</option>
+        </select>
+        <select><option>All departments</option><option>Engineering</option><option>Product</option><option>Sales</option><option>Operations</option></select>
+        <button class="btn btn-sm">Export report</button>
+        <button class="btn btn-sm btn-primary" id="release-btn" onclick="releaseToggle()">Release cycle</button>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Completion rate</div><div class="stat-val" id="hr-s1">33%</div><div class="stat-delta" id="hr-d1">Cycle in progress</div></div>
+      <div class="stat"><div class="stat-label">Avg company score</div><div class="stat-val" id="hr-s2">3.6</div><div class="stat-delta delta-up" id="hr-d2">+0.2 vs H2 2025</div></div>
+      <div class="stat"><div class="stat-label">High performers</div><div class="stat-val" style="color:var(--green)" id="hr-s3">12</div><div class="stat-delta delta-up" id="hr-d3">+3 vs last cycle</div></div>
+      <div class="stat"><div class="stat-label">At risk</div><div class="stat-val" style="color:var(--red)" id="hr-s4">5</div><div class="stat-delta delta-dn" id="hr-d4">+1 vs last cycle</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:12px;margin-bottom:14px">
+      <div class="card">
+        <div class="card-label">Avg score by department</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="deptChart" role="img" aria-label="Average performance score by department"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Score distribution</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="distChart" role="img" aria-label="Distribution of employee scores 1 to 5"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-label">Score trend — last 4 cycles</div>
+      <div class="chart-wrap" style="height:130px"><canvas id="trendChart" role="img" aria-label="Company average score trend over 4 cycles"></canvas></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--green-text)">High performers</div>
+          <span style="font-size:11px;color:var(--blue-text);cursor:pointer">See all 12</span>
+        </div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">YT</div><div style="flex:1"><div class="emp-name">Yuki Tanaka</div><div class="emp-dept">Engineering</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.8</span></div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">AN</div><div style="flex:1"><div class="emp-name">Aisha Nkosi</div><div class="emp-dept">Engineering</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.6</span></div>
+        <div class="emp-row"><div class="avatar av-green" style="width:28px;height:28px;font-size:11px">CB</div><div style="flex:1"><div class="emp-name">Claire Bouchard</div><div class="emp-dept">Design</div></div><span class="score-pill" style="background:var(--green-bg);color:var(--green-text)">4.5</span></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--red-text)">At risk</div>
+          <span style="font-size:11px;color:var(--blue-text);cursor:pointer">See all 5</span>
+        </div>
+        <div class="emp-row"><div class="avatar av-red" style="width:28px;height:28px;font-size:11px">MW</div><div style="flex:1"><div class="emp-name">Marcus Webb</div><div class="emp-dept">Sales</div></div><span class="score-pill" style="background:var(--red-bg);color:var(--red-text)">2.1</span></div>
+        <div class="emp-row"><div class="avatar av-red" style="width:28px;height:28px;font-size:11px">SO</div><div style="flex:1"><div class="emp-name">Sara Okonkwo</div><div class="emp-dept">Operations</div></div><span class="score-pill" style="background:var(--red-bg);color:var(--red-text)">2.4</span></div>
+        <div class="emp-row"><div class="avatar av-red" style="width:28px;height:28px;font-size:11px">JO</div><div style="flex:1"><div class="emp-name">James Owusu</div><div class="emp-dept">Finance</div></div><span class="score-pill" style="background:var(--red-bg);color:var(--red-text)">2.6</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4: EMPLOYEE SELF-ASSESSMENT
+══════════════════════════════════════════ -->
+<div id="page-employee" class="page">
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-appname">Performance Review</div>
+      <div class="sidebar-role">Employee</div>
+    </div>
+    <div class="sidebar-section">My Review</div>
+    <div class="sidebar-item active">Self-assessment</div>
+    <div class="sidebar-item">My history</div>
+    <div class="sidebar-section">Goals</div>
+    <div class="sidebar-item">Current goals</div>
+    <div class="sidebar-footer">
+      <div class="sf-label">Logged in as</div>
+      <div class="sf-name">Daniel Reeves</div>
+      <div class="sf-sub">Senior Engineer</div>
+    </div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+    <div class="main" style="flex:1">
+      <div class="tab-bar">
+        <div class="tab active" id="emp-tab-form" onclick="empTab('form')">H1 2026 self-assessment</div>
+        <div class="tab" id="emp-tab-hist" onclick="empTab('hist')">My review history</div>
+      </div>
+
+      <!-- Self-assessment form -->
+      <div id="emp-pane-form">
+        <div class="notice notice-amber">
+          <div class="notice-dot" style="background:var(--amber)"></div>
+          <div>Cycle closes <strong>Jun 30, 2026</strong> — 57 days remaining. Your self-assessment is saved as a draft.</div>
+        </div>
+        <div style="margin-bottom:18px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-3);margin-bottom:5px"><span>Progress</span><span id="emp-pct">50%</span></div>
+          <div class="pbar-wrap"><div class="pbar-fill pbar-blue" id="emp-prog" style="width:50%"></div></div>
+        </div>
+
+        <div class="card-label">Rate yourself</div>
+        <div class="card">
+          <div style="display:flex;justify-content:flex-end;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text-3)">1 = needs work &nbsp;&nbsp; 5 = exceptional</span>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Technical skills</div><div class="comp-hint">Code quality, system design, problem solving</div></div>
+            <div class="stars" data-er="1"><div class="star" onclick="empRate(1,1)">1</div><div class="star" onclick="empRate(1,2)">2</div><div class="star" onclick="empRate(1,3)">3</div><div class="star on" onclick="empRate(1,4)">4</div><div class="star" onclick="empRate(1,5)">5</div></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Communication</div><div class="comp-hint">Written and verbal clarity, documentation</div></div>
+            <div class="stars" data-er="2"><div class="star" onclick="empRate(2,1)">1</div><div class="star" onclick="empRate(2,2)">2</div><div class="star on" onclick="empRate(2,3)">3</div><div class="star" onclick="empRate(2,4)">4</div><div class="star" onclick="empRate(2,5)">5</div></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Collaboration</div><div class="comp-hint">Teamwork, cross-functional work, mentoring</div></div>
+            <div class="stars" data-er="3"><div class="star" onclick="empRate(3,1)">1</div><div class="star" onclick="empRate(3,2)">2</div><div class="star" onclick="empRate(3,3)">3</div><div class="star" onclick="empRate(3,4)">4</div><div class="star on" onclick="empRate(3,5)">5</div></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-info"><div class="comp-name">Ownership &amp; delivery</div><div class="comp-hint">Reliability, initiative, hitting commitments</div></div>
+            <div class="stars" data-er="4"><div class="star" onclick="empRate(4,1)">1</div><div class="star" onclick="empRate(4,2)">2</div><div class="star" onclick="empRate(4,3)">3</div><div class="star on" onclick="empRate(4,4)">4</div><div class="star" onclick="empRate(4,5)">5</div></div>
+          </div>
+        </div>
+
+        <div class="card-label">Reflect</div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:7px">What are you most proud of this half?</div>
+          <textarea rows="3" id="ta1" oninput="charCount('ta1','cc1',300)">Led the migration to the new API layer ahead of schedule and mentored two junior engineers through their first major feature delivery.</textarea>
+          <div style="text-align:right;font-size:11px;color:var(--text-3);margin-top:4px" id="cc1">131 / 300</div>
+          <div style="font-size:12px;color:var(--text-2);margin:13px 0 7px">What do you want to improve next cycle?</div>
+          <textarea rows="3" id="ta2" oninput="charCount('ta2','cc2',300)">I'd like to improve how I communicate blockers upward — I tend to hold issues longer than I should before escalating.</textarea>
+          <div style="text-align:right;font-size:11px;color:var(--text-3);margin-top:4px" id="cc2">114 / 300</div>
+          <div style="font-size:12px;color:var(--text-2);margin:13px 0 7px">Anything else your manager should know? <span style="color:var(--text-3)">(optional · visible to your manager and GM)</span></div>
+          <textarea rows="2" placeholder="Workload, team dynamics, personal context..."></textarea>
+        </div>
+      </div>
+
+      <!-- History pane -->
+      <div id="emp-pane-hist" style="display:none">
+        <div class="card-label">Review history</div>
+        <div class="hist-item">
+          <div class="hist-line"><div class="h-dot h-dot-active"></div><div class="h-vline"></div></div>
+          <div class="hist-content">
+            <div class="h-cycle">H2 2025</div>
+            <div class="h-meta">Reviewed by Tom Hargreaves · Released Jan 15, 2026</div>
+            <div class="h-scores">
+              <div class="h-pill">Technical 4/5</div><div class="h-pill">Communication 3/5</div>
+              <div class="h-pill">Collaboration 4/5</div><div class="h-pill">Ownership 4/5</div>
+              <div class="h-pill h-total">Overall 3.8</div>
+            </div>
+            <div style="margin-top:10px;font-size:13px;color:var(--text);line-height:1.6;padding:10px 12px;background:var(--surface-2);border-radius:var(--radius);border-left:3px solid var(--border-strong)">
+              "Daniel had a strong half — particularly the API migration and his mentoring contributions. Key growth area: escalate blockers earlier."
+            </div>
+          </div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-line"><div class="h-dot h-dot-old"></div><div class="h-vline"></div></div>
+          <div class="hist-content">
+            <div class="h-cycle">H1 2025</div>
+            <div class="h-meta">Reviewed by Tom Hargreaves · Released Jul 8, 2025</div>
+            <div class="h-scores">
+              <div class="h-pill">Technical 3/5</div><div class="h-pill">Communication 3/5</div>
+              <div class="h-pill">Collaboration 4/5</div><div class="h-pill">Ownership 3/5</div>
+              <div class="h-pill h-total">Overall 3.3</div>
+            </div>
+          </div>
+        </div>
+        <div class="hist-item">
+          <div class="hist-line"><div class="h-dot h-dot-old"></div></div>
+          <div class="hist-content">
+            <div class="h-cycle">H2 2024</div>
+            <div class="h-meta">Reviewed by Tom Hargreaves · Released Jan 12, 2025</div>
+            <div class="h-scores">
+              <div class="h-pill">Technical 3/5</div><div class="h-pill">Communication 2/5</div>
+              <div class="h-pill">Collaboration 3/5</div><div class="h-pill">Ownership 3/5</div>
+              <div class="h-pill h-total">Overall 2.8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="page-footer" id="emp-footer">
+      <div class="footer-note">Draft auto-saved · 11:42 am</div>
+      <div style="display:flex;gap:9px"><button class="btn">Save draft</button><button class="btn btn-primary">Submit self-assessment</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+function showPage(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'hr') initHRCharts();
+}
+
+// Reviewer tabs
+function rvTab(t) {
+  ['mgr','self','goals'].forEach(id => {
+    document.getElementById('rv-tab-' + id).className = 'tab' + (t === id ? ' active' : '');
+    document.getElementById('rv-pane-' + id).style.display = t === id ? 'block' : 'none';
+  });
+}
+
+// Reviewer ratings
+function rate(row, val) {
+  document.querySelectorAll('[data-row="' + row + '"] .star').forEach((s, i) => {
+    s.className = 'star' + (i < val ? ' on' : '');
+  });
+}
+
+// Employee tabs
+function empTab(t) {
+  ['form','hist'].forEach(id => {
+    document.getElementById('emp-tab-' + id).className = 'tab' + (t === id ? ' active' : '');
+    document.getElementById('emp-pane-' + id).style.display = t === id ? 'block' : 'none';
+  });
+  document.getElementById('emp-footer').style.display = t === 'form' ? 'flex' : 'none';
+}
+
+// Employee ratings
+function empRate(row, val) {
+  document.querySelectorAll('[data-er="' + row + '"] .star').forEach((s, i) => {
+    s.className = 'star' + (i < val ? ' on' : '');
+  });
+  let on = 0, total = 0;
+  document.querySelectorAll('[data-er] .star').forEach(s => { total++; if (s.classList.contains('on')) on++; });
+  const pct = Math.round((on / total) * 100);
+  document.getElementById('emp-prog').style.width = pct + '%';
+  document.getElementById('emp-pct').textContent = pct + '%';
+}
+
+function charCount(taId, ccId, max) {
+  const len = document.getElementById(taId).value.length;
+  document.getElementById(ccId).textContent = len + ' / ' + max;
+}
+
+// HR stats
+const hrData = {
+  h1_26: { s1:'33%', d1:'Cycle in progress', s2:'3.6', d2:'+0.2 vs H2 2025', dClass2:'delta-up', s3:'12', d3:'+3 vs last cycle', dClass3:'delta-up', s4:'5', d4:'+1 vs last cycle', dClass4:'delta-dn' },
+  h2_25: { s1:'94%', d1:'+4% vs H1 2025', s2:'3.4', d2:'+0.2 vs H1 2025', dClass2:'delta-up', s3:'9', d3:'+1 vs last cycle', dClass3:'delta-up', s4:'4', d4:'Same as last cycle', dClass4:'' },
+  h1_25: { s1:'88%', d1:'Completed', s2:'3.2', d2:'-0.1 vs H2 2024', dClass2:'delta-dn', s3:'8', d3:'Baseline', dClass3:'', s4:'4', d4:'Baseline', dClass4:'' }
+};
+function updateHRStats(val) {
+  const d = hrData[val];
+  ['1','2','3','4'].forEach(n => {
+    document.getElementById('hr-s' + n).textContent = d['s' + n];
+    const el = document.getElementById('hr-d' + n);
+    el.textContent = d['d' + n];
+    el.className = 'stat-delta ' + (d['dClass' + n] || '');
+  });
+}
+
+// HR release button
+let released = false;
+function releaseToggle() {
+  released = !released;
+  const btn = document.getElementById('release-btn');
+  btn.textContent = released ? 'Cycle released ✓' : 'Release cycle';
+  btn.style.background = released ? 'var(--green)' : 'var(--text)';
+  btn.style.borderColor = released ? 'var(--green)' : 'var(--text)';
+}
+
+// Charts (lazy init on first HR page visit)
+let chartsInited = false;
+function initHRCharts() {
+  if (chartsInited) return;
+  chartsInited = true;
+  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const tc = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.38)';
+  const gc = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const base = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc } },
+      y: { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc } }
+    }
+  };
+
+  new Chart(document.getElementById('deptChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Engineering','Product','Sales','Operations','Design','Finance'],
+      datasets: [{ data: [3.8,3.6,3.2,3.5,4.0,3.4], backgroundColor: '#2563eb', borderRadius: 4, barThickness: 18 }]
+    },
+    options: { ...base, scales: { x: { ticks: { color: tc, font: { size: 10 } }, grid: { color: gc } }, y: { min: 0, max: 5, ticks: { color: tc, font: { size: 11 }, stepSize: 1 }, grid: { color: gc } } } }
+  });
+
+  new Chart(document.getElementById('distChart'), {
+    type: 'bar',
+    data: {
+      labels: ['1','2','3','4','5'],
+      datasets: [{ data: [3,7,22,28,12], backgroundColor: ['#dc2626','#d97706','#2563eb','#2563eb','#16a34a'], borderRadius: 4, barThickness: 32 }]
+    },
+    options: { ...base, scales: { x: { ticks: { color: tc, font: { size: 11 } }, grid: { display: false } }, y: { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc } } } }
+  });
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: ['H2 2024','H1 2025','H2 2025','H1 2026'],
+      datasets: [{
+        data: [3.1, 3.2, 3.4, 3.6],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.07)',
+        pointBackgroundColor: '#2563eb',
+        pointRadius: 5,
+        tension: 0.35,
+        fill: true,
+        segment: { borderDash: ctx => ctx.p1DataIndex === 3 ? [5,4] : undefined }
+      }]
+    },
+    options: { ...base, scales: { x: { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc } }, y: { min: 2.5, max: 5, ticks: { color: tc, font: { size: 11 } }, grid: { color: gc } } } }
+  });
+}
+</script>
+</body>
+</html>
